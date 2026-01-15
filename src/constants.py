@@ -1,5 +1,9 @@
 import pyarrow as pa
 
+"""
+This module defines the Apache PyArrow schema for social media data.
+It provides a standardized structure for user profiles and post metadata.
+"""
 
 USER_FIELDS = [
     pa.field("username", pa.string()),
@@ -24,15 +28,21 @@ USER_FIELDS = [
     pa.field("url", pa.string())
 ]
 
+# Encapsulate user fields into a reusable struct
 USER_STRUCT = pa.struct(USER_FIELDS)
 
+""" 
+Define the primary schema for a tweet
+Schema is in dictionary format to easily select the columns to be used,
+taking advantage of pyarrow features.
+"""
 BASE_SCHEMA = {
     "url": pa.field("url", pa.string()),
     "date": pa.field("date", pa.string()),
     "content": pa.field("content", pa.string()),
     "RenderedContent": pa.field("RenderedContent", pa.string()),
     "id": pa.field("id", pa.int64()),
-    "user": pa.field("user", USER_STRUCT),
+    "user": pa.field("user", USER_STRUCT), # Nested struct for the author
     "outlinks": pa.field("outlinks", pa.list_(pa.string())),
     "tcooutlinks": pa.field("tcooutlinks", pa.list_(pa.string())),
     "replyCount": pa.field("replyCount", pa.int64()),
@@ -41,5 +51,5 @@ BASE_SCHEMA = {
     "quoteCount": pa.field("quoteCount", pa.int64()),
     "conversationId": pa.field("conversationId", pa.int64()),
     "lang": pa.field("lang", pa.string()),
-    "mentionedUsers": pa.field("mentionedUsers", pa.list_(USER_STRUCT)),
+    "mentionedUsers": pa.field("mentionedUsers", pa.list_(USER_STRUCT)), # List of nested user structs for mentioned users
 }
