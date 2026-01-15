@@ -23,7 +23,9 @@ def build_dataframe_time(file_path: str, selected_cols: List[str]):
     :type selected_cols: List[str]
     """
     pa_schema = build_pa_schema(selected_cols)
+
     parse_options = pj.ParseOptions(explicit_schema=pa_schema, unexpected_field_behavior="ignore")
+    
     table = pj.read_json(file_path, parse_options=parse_options)
     return table.to_pandas()
 
