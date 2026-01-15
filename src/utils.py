@@ -4,6 +4,7 @@ from src.constants import BASE_SCHEMA
 import pyarrow.json as pj
 import pyarrow as pa
 import pandas as pd
+import emoji
 
 
 def build_pa_schema(selected_cols: List[str]):
@@ -24,6 +25,7 @@ def build_dataframe_time(file_path: str, selected_cols: List[str]):
     table = pj.read_json(file_path, parse_options=parse_options)
     return table.to_pandas()
 
+
 def build_dataframe_chunks(file_path: str, selected_cols: List[str], block_size: int = 1000000) -> Generator[pd.DataFrame, None, None]:
     """
     Build dataframe in chunks using a subset of columns from a JSON file.
@@ -42,3 +44,11 @@ def build_dataframe_chunks(file_path: str, selected_cols: List[str], block_size:
         for batch in reader:
             # Convert each RecordBatch to a pandas DataFrame
             yield batch.to_pandas()
+
+
+def extract_emojis(text: str) -> List[str]:
+    """Extracts all emojis from a given string."""
+    if not text:
+        return []
+    # emoji_list returns a list of dictionaries with emoji information
+    return [item['emoji'] for item in emoji.emoji_list(text)]
