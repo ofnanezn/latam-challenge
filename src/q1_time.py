@@ -1,13 +1,13 @@
 from typing import List, Tuple
 
-from src.utils import build_dataframe
+from src.utils import build_dataframe_time
 from datetime import datetime
 import pandas as pd
 
-def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
+def q1_time(file_path: str, chunk_size: int = 100) -> List[Tuple[datetime.date, str]]:
     # Assuming beforehand we know the columns we need for the exercise 
     required_cols = ['date', 'user']
-    df = build_dataframe(file_path, required_cols)
+    df = build_dataframe_time(file_path, required_cols)
     df['date'] = pd.to_datetime(df['date']).dt.date
     df['counts'] = df.groupby('date')['date'].transform('count')
     df['rank'] = df['counts'].rank(ascending=False, method='dense')
